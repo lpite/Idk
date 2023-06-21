@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="file" id="input_dom_element" />
+  </body>
+  <script lang="javascript" src="https://unpkg.com/xlsx/xlsx.js"></script>
+  <script>
+    async function handleFileAsync(e) {
+      const file = e.target.files[0];
+      const data = await file.arrayBuffer();
+      const workbook = XLSX.read(data);
+      const sheetName = Object.keys(workbook.Sheets)[0];
+      const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
+        header: 1,
+      });
+      sheet[0][0] = "1312312";
+      console.log(sheet)
+      const wb = XLSX.utils.book_new();
+      const ws =  XLSX.utils.json_to_sheet(sheet);
+      XLSX.utils.book_append_sheet(wb, ws, "1");
+      XLSX.writeFile(wb, "SheetJSTable.xlsx");
+    }
+    input_dom_element.addEventListener("change", handleFileAsync, false);
+  </script>
+</html>
